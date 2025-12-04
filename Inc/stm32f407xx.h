@@ -482,6 +482,7 @@ typedef struct {
 #define USART_CR2_CPHA_POS 9
 #define USART_CR2_CPOL_POS 10
 #define USART_CR2_CLKEN_POS 11
+#define USART_CR2_STOP_POS 12
 #define USART_CR2_LINEN_POS 14
 
 #define USART_CR3_EIE_POS 0
@@ -502,5 +503,6 @@ typedef struct {
 #include "stm32f407xx_spi_driver.h"
 #include "stm32f407xx_i2c_driver.h"
 #include "stm32f407xx_usart_driver.h"
+#include "stm32f407xx_rcc_driver.h"
 
 #endif /* INC_STM32F407XX_H_ */
