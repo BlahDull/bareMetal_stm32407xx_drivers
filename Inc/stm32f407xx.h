@@ -499,6 +499,13 @@ typedef struct {
 #define USART_CR3_ONEBIT_POS 11
 
 
+#define IRQ_USART1 37
+#define IRQ_USART2 38
+#define IRQ_USART3 39
+#define IRQ_UART4 40
+#define IRQ_UART5 41
+#define IRQ_USART6 71
+
 #include "stm32f407xx_gpio_driver.h"
 #include "stm32f407xx_spi_driver.h"
 #include "stm32f407xx_i2c_driver.h"

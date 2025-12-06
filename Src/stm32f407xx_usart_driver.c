@@ -175,7 +175,7 @@ uint8_t USART_ReceiveDataIT(USART_Handle_t *pUSARTHandle, uint8_t *pRxBuffer, ui
 	if (rxState != USART_BUSY_IN_RX) {
 		pUSARTHandle->USART_RXLen = Len;
 		pUSARTHandle->pRXBuffer = pRxBuffer;
-		pUSARTHandle->USART_RXState = USART_BUSY_IN_TX;
+		pUSARTHandle->USART_RXState = USART_BUSY_IN_RX;
 		pUSARTHandle->pUSARTx->USART_CR1 |= (1 << USART_CR1_RXNEIE_POS);
 	}
 	return rxState;
@@ -218,7 +218,7 @@ void USART_IRQHandling(USART_Handle_t *pUSARTHandle) {
 	uint32_t tmp1, tmp2, tmp3;
 	tmp1 = pUSARTHandle->pUSARTx->USART_SR & (1 << USART_SR_TC_POS);
 	tmp2 = pUSARTHandle->pUSARTx->USART_CR1 & (1 << USART_CR1_TCIE_POS);
-
+	uint16_t* pdata;
 	if (tmp1 && tmp2) {
 		if (pUSARTHandle->USART_TXState == USART_BUSY_IN_TX) {
 			if (!pUSARTHandle->USART_TXLen) {
@@ -239,7 +239,6 @@ void USART_IRQHandling(USART_Handle_t *pUSARTHandle) {
 		if (pUSARTHandle->USART_TXState == USART_BUSY_IN_TX) {
 			if (pUSARTHandle->USART_TXLen > 0) {
 				if (pUSARTHandle->USART_Config.USART_WordLength == USART_WORDLEN_9BITS) {
-					uint16_t* pdata;
 					pdata = (uint16_t*) pUSARTHandle->pTXBuffer;
 					pUSARTHandle->pUSARTx->USART_DR = (*pdata & (uint16_t) 0x1FF);
 					if (pUSARTHandle->USART_Config.USART_ParityControl == USART_PARITY_DISABLE) {
