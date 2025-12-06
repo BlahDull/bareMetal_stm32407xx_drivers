@@ -99,6 +99,17 @@ typedef struct {
 #define USART_FLAG_TXE (1 << USART_SR_TXE_POS)
 #define USART_FLAG_TC (1 << USART_SR_TC_POS)
 
+
+
+#define USART_EVENT_TX_CMPLT 0
+#define USART_EVENT_RX_CMPLT 1
+#define USART_EVENT_CTS 2
+#define USART_EVENT_IDLE 3
+#define USART_EVENT_ORE 4
+#define USART_ERREVENT_FE 5
+#define USART_ERREVENT_NF 6
+#define USART_ERREVENT_ORE 7
+
 /******************************************************************************************
  *								APIs supported by this driver
  *		 For more information about the APIs check the function definitions

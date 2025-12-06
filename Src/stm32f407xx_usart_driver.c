@@ -207,6 +207,132 @@ void USART_IRQPriorityConfig(uint8_t IRQNumber, uint32_t IRQPriority) {
 	*(NVIC_IPR_BASE_ADDR + iprx) |= (IRQPriority << shift_num);
 }
 
+static void USART_ClearIdleBit(USART_RegDef_t* pUSARTx) {
+	uint8_t dummyread;
+	dummyread = pUSARTx->USART_DR;
+	(void) dummyread;
+
+}
+
+void USART_IRQHandling(USART_Handle_t *pUSARTHandle) {
+	uint32_t tmp1, tmp2, tmp3;
+	tmp1 = pUSARTHandle->pUSARTx->USART_SR & (1 << USART_SR_TC_POS);
+	tmp2 = pUSARTHandle->pUSARTx->USART_CR1 & (1 << USART_CR1_TCIE_POS);
+
+	if (tmp1 && tmp2) {
+		if (pUSARTHandle->USART_TXState == USART_BUSY_IN_TX) {
+			if (!pUSARTHandle->USART_TXLen) {
+				pUSARTHandle->pUSARTx->USART_SR &= ~(1 << USART_SR_TC_POS);
+				pUSARTHandle->pUSARTx->USART_CR1 &= ~(1 << USART_CR1_TCIE_POS);
+				pUSARTHandle->USART_TXState = USART_READY;
+				pUSARTHandle->pTXBuffer = NULL;
+				pUSARTHandle->USART_TXLen = 0;
+				USART_ApplicationEventCallback(pUSARTHandle, USART_EVENT_TX_CMPLT);
+			}
+		}
+	}
+
+	tmp1 = pUSARTHandle->pUSARTx->USART_SR & (1 << USART_SR_TXE_POS);
+	tmp2 = pUSARTHandle->pUSARTx->USART_CR1 & (1 << USART_CR1_TXEIE_POS);
+
+	if (tmp1 && tmp2) {
+		if (pUSARTHandle->USART_TXState == USART_BUSY_IN_TX) {
+			if (pUSARTHandle->USART_TXLen > 0) {
+				if (pUSARTHandle->USART_Config.USART_WordLength == USART_WORDLEN_9BITS) {
+					uint16_t* pdata;
+					pdata = (uint16_t*) pUSARTHandle->pTXBuffer;
+					pUSARTHandle->pUSARTx->USART_DR = (*pdata & (uint16_t) 0x1FF);
+					if (pUSARTHandle->USART_Config.USART_ParityControl == USART_PARITY_DISABLE) {
+						pUSARTHandle->pTXBuffer += 2;
+						pUSARTHandle->USART_TXLen--;
+					} else {
+						pUSARTHandle->pTXBuffer++;
+						pUSARTHandle->USART_TXLen--;
+					}
+				} else {
+					pUSARTHandle->pUSARTx->USART_DR = (*pUSARTHandle->pTXBuffer & (uint8_t)0xFF);
+					pUSARTHandle->pTXBuffer++;
+					pUSARTHandle->USART_TXLen--;
+				}
+			}
+			if (pUSARTHandle->USART_TXLen == 0) {
+				pUSARTHandle->pUSARTx->USART_CR1 &= ~(1 << USART_CR1_TXEIE_POS);
+			}
+		}
+	}
+
+	tmp1 = pUSARTHandle->pUSARTx->USART_SR & (1 << USART_SR_RXNE_POS);
+	tmp2 = pUSARTHandle->pUSARTx->USART_CR1 & (1 << USART_CR1_RXNEIE_POS);
+
+	if (tmp1 && tmp2) {
+		if (pUSARTHandle->USART_RXState == USART_BUSY_IN_RX) {
+			if (pUSARTHandle->USART_RXLen > 0) {
+				if (pUSARTHandle->USART_Config.USART_WordLength == USART_WORDLEN_9BITS) {
+					if (pUSARTHandle->USART_Config.USART_ParityControl == USART_PARITY_DISABLE) {
+						*((uint16_t*) pUSARTHandle->pRXBuffer) = (pUSARTHandle->pUSARTx->USART_DR & (uint16_t) 0x1FF);
+						pUSARTHandle->pRXBuffer += 2;
+						pUSARTHandle->USART_RXLen--;
+					} else {
+						*pUSARTHandle->pRXBuffer = (pUSARTHandle->pUSARTx->USART_DR & (uint8_t)0xFF);
+						pUSARTHandle->pRXBuffer++;
+						pUSARTHandle->USART_RXLen--;
+					}
+				} else {
+					if (pUSARTHandle->USART_Config.USART_ParityControl == USART_PARITY_DISABLE) {
+						*pUSARTHandle->pRXBuffer = (uint8_t) (pUSARTHandle->pUSARTx->USART_DR & (uint8_t)0xFF);
+					} else {
+						*pUSARTHandle->pRXBuffer = (uint8_t) (pUSARTHandle->pUSARTx->USART_DR & (uint8_t)0x7F);
+					}
+					pUSARTHandle->pRXBuffer++;
+					pUSARTHandle->USART_RXLen--;
+				}
+			}
+			if (pUSARTHandle->USART_RXLen == 0) {
+				pUSARTHandle->pUSARTx->USART_CR1 &= ~(1 << USART_CR1_RXNEIE_POS);
+				pUSARTHandle->USART_RXState = USART_READY;
+				USART_ApplicationEventCallback(pUSARTHandle, USART_EVENT_RX_CMPLT);
+			}
+		}
+	}
+
+	tmp1 = pUSARTHandle->pUSARTx->USART_CR3 & (1 << USART_CR3_CTSE_POS);
+	tmp2 = pUSARTHandle->pUSARTx->USART_CR3 & (1 << USART_CR3_CTSIE_POS);
+	tmp3 = pUSARTHandle->pUSARTx->USART_SR & (1 << USART_SR_CTS_POS);
+
+	if (tmp1 && tmp2 && tmp3) {
+		pUSARTHandle->pUSARTx->USART_SR &= ~(1 << USART_SR_CTS_POS);
+		USART_ApplicationEventCallback(pUSARTHandle, USART_EVENT_CTS);
+	}
+
+
+	tmp2 = pUSARTHandle->pUSARTx->USART_CR1 & (1 << USART_CR1_IDLEIE_POS);
+	tmp1 = pUSARTHandle->pUSARTx->USART_SR & (1 << USART_SR_IDLE_POS);
+	if (tmp1 && tmp2) {
+		USART_ClearIdleBit(pUSARTHandle->pUSARTx);
+		USART_ApplicationEventCallback(pUSARTHandle, USART_EVENT_IDLE);
+	}
+
+
+	tmp1 = pUSARTHandle->pUSARTx->USART_SR & (1 << USART_SR_ORE_POS);
+	tmp2 = pUSARTHandle->pUSARTx->USART_CR1 & (1 << USART_CR1_RXNEIE_POS);
+
+	if (tmp1 && tmp2) {
+		USART_ApplicationEventCallback(pUSARTHandle, USART_EVENT_ORE);
+	}
+
+
+	tmp1 = pUSARTHandle->pUSARTx->USART_CR3 & (1 << USART_CR3_EIE_POS);
+	if (tmp1) {
+		tmp1 = pUSARTHandle->pUSARTx->USART_SR & (1 << USART_SR_FE_POS);
+		if (tmp1) USART_ApplicationEventCallback(pUSARTHandle, USART_ERREVENT_FE);
+		tmp1 = pUSARTHandle->pUSARTx->USART_SR & (1 << USART_SR_NF_POS);
+		if (tmp1) USART_ApplicationEventCallback(pUSARTHandle, USART_ERREVENT_NF);
+		tmp1 = pUSARTHandle->pUSARTx->USART_SR & (1 << USART_SR_ORE_POS);
+		if (tmp1) USART_ApplicationEventCallback(pUSARTHandle, USART_ERREVENT_ORE);
+	}
+
+}
+
 __weak__ void USART_ApplicationEventCallback(USART_Handle_t *pUSARTHandle,uint8_t AppEv) {
 
 }
