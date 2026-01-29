@@ -56,6 +56,8 @@
 #define GPIOJ_BASE_ADDR (AHB1_PERIPH_BASE + 0x2400)
 #define GPIOK_BASE_ADDR (AHB1_PERIPH_BASE + 0x2800)
 #define RCC_BASE_ADDR (AHB1_PERIPH_BASE + 0x3800)
+#define DMA1_BASE_ADDR (AHB1_PERIPH_BASE + 0x6000)
+#define DMA2_BASE_ADDR (AHB1_PERIPH_BASE + 0x6400)
 
 // APB1 Bus Peripherals
 #define I2C1_BASE_ADDR (APB1_PERIPH_BASE + 0x5400)
@@ -190,6 +192,25 @@ typedef struct {
 	__vo uint32_t USART_GTPR;
 } USART_RegDef_t;
 
+
+typedef struct {
+	__vo uint32_t DMA_S_CR;
+	__vo uint32_t DMA_S_NDTR;
+	__vo uint32_t DMA_S_PAR;
+	__vo uint32_t DMA_S_M0AR;
+	__vo uint32_t DMA_S_M1AR;
+	__vo uint32_t DMA_S_FCR;
+} DMA_Stream_t;
+
+
+typedef struct {
+	__vo uint32_t DMA_LISR;
+	__vo uint32_t DMA_HISR;
+	__vo uint32_t DMA_LIFCR;
+	__vo uint32_t DMA_HIFCR;
+	DMA_Stream_t DMA_Streams[8];
+} DMA_RegDef_t;
+
 // Peripheral Definitions
 
 #define RCC ((RCC_RegDef_t*) RCC_BASE_ADDR)
@@ -208,6 +229,9 @@ typedef struct {
 #define GPIOH ((GPIO_RegDef_t*) GPIOH_BASE_ADDR)
 #define GPIOI ((GPIO_RegDef_t*) GPIOI_BASE_ADDR)
 
+
+#define DMA1 ((DMA_RegDef_t*) DMA1_BASE_ADDR)
+#define DMA2 ((DMA_RegDef_t*) DMA2_BASE_ADDR)
 
 
 #define SPI1 ((SPI_RegDef_t*) SPI1_BASE_ADDR)
@@ -237,6 +261,10 @@ typedef struct {
 #define GPIOG_PCLK_EN() (RCC->AHB1ENR |= (1 << 6))
 #define GPIOH_PCLK_EN() (RCC->AHB1ENR |= (1 << 7))
 #define GPIOI_PCLK_EN() (RCC->AHB1ENR |= (1 << 8))
+
+// Clock enable macros for DMA peripherals
+#define DMA1_PCLK_EN()  (RCC->AHB1ENR |= (1 << 21))
+#define DMA2_PCLK_EN()  (RCC->AHB1ENR |= (1 << 22))
 
 // Clock enable macros for I2C peripherals
 #define I2C1_PCLK_EN() (RCC->APB1ENR |= (1 << 21))
@@ -506,10 +534,24 @@ typedef struct {
 #define IRQ_UART5 41
 #define IRQ_USART6 71
 
+#define IRQ_DMA1_STREAM0 11
+#define IRQ_DMA1_STREAM1 12
+#define IRQ_DMA1_STREAM2 13
+#define IRQ_DMA1_STREAM3 14
+#define IRQ_DMA1_STREAM4 15
+#define IRQ_DMA1_STREAM5 16
+#define IRQ_DMA1_STREAM6 17
+#define IRQ_DMA2_STREAM0 56
+#define IRQ_DMA2_STREAM1 57
+#define IRQ_DMA2_STREAM2 58
+#define IRQ_DMA2_STREAM3 59
+#define IRQ_DMA2_STREAM4 60
+
 #include "stm32f407xx_gpio_driver.h"
 #include "stm32f407xx_spi_driver.h"
 #include "stm32f407xx_i2c_driver.h"
 #include "stm32f407xx_usart_driver.h"
+#include "stm32f407xx_dma_driver.h"
 #include "stm32f407xx_rcc_driver.h"
 
 #endif /* INC_STM32F407XX_H_ */

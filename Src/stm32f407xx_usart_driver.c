@@ -181,6 +181,10 @@ uint8_t USART_ReceiveDataIT(USART_Handle_t *pUSARTHandle, uint8_t *pRxBuffer, ui
 	return rxState;
 }
 
+void USART_SendDataDMA(USART_Handle_t *pUSARTHandle) {
+	pUSARTHandle->pUSARTx->USART_CR3 |= (1 << USART_CR3_DMAT_POS);
+}
+
 void USART_IRQ_ITConfig(uint8_t IRQNumber, uint8_t EnOrDi) {
 	if (EnOrDi) {
 		if (IRQNumber <= 31) {
