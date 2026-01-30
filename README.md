@@ -5,13 +5,15 @@ Project implementing bare metal drivers for peripheral control for STM32407xx fa
 
 **Drivers Implemented:**
 
-* **GPIO**: Allows the user to specify several configurations for the pins on each GPIO port of the MCU. Such as speed, output type, pull up / pull down resistors, alternate functionality mode, etc.
+* **GPIO**: Allows the user to specify several configurations for the pins on each GPIO port of the MCU. Such as speed, output type, pull up / pull down resistors, alternate functionality mode, etc. Supports polling and interrupt modes.
 
-* **SPI**: Allows the user to use SPI protocol in their applications for serial communication with sensors or other devices. The user can specify clock speed, CPOL and CPHA configuration, Master/Slave mode, and whether to use 8 or 16 bit communication. Supports full-duplex, half-duplex, or simplex communication.
+* **SPI**: Allows the user to use SPI protocol in their applications for serial communication with sensors or other devices. The user can specify clock speed, CPOL and CPHA configuration, Master/Slave mode, and whether to use 8 or 16 bit communication. Supports full-duplex, half-duplex, or simplex communication. Supports polling and interrupt modes.
 
-* **I2C**: Allows the user to use I2C protocol in their applications for serial communication with sensors or other devices. The user can specify speed, addresses, whether or not to use automatic ACKing, the mode (standard or fast), and supports duty cycles of 2/1 and 16/9.
+* **I2C**: Allows the user to use I2C protocol in their applications for serial communication with sensors or other devices. The user can specify speed, addresses, whether or not to use automatic ACKing, the mode (standard or fast), and supports duty cycles of 2/1 and 16/9. Supports polling and interrupt modes.
 
-* **USART**: TODO
+* **USART**: Allows the user to use UART protocol in their applications for serial communication with sensors or other devices. The user can specify baud rate, number of stop bits, word length, etc. Supports polling, interrupt, and DMA modes.
+
+* **DMA**: Allows the user to configure the DMA controller to enable DMA streams to transfer data from memory to memory, peripheral to memory, and memory to peripheral. The user can specify whether or not to use FIFO, the FIFO threshold, priority, whether or not to auto increment the addresses, and whether or not interrupts.
 
 # API Description & Usage
 ***TODO***
@@ -31,5 +33,7 @@ C was the exclusive programming language used for this project. No libraries wer
 This project was taken for the purpose of learning and getting hands on experience with bare metal embedded driver development. I have enjoy low-level development and wanted to gain experience working with register level programming and implementing my own APIs for different protocols without using a HAL, to learn how the hardware/software interactions really work.
 
 # Known Issues
+I2C interrupt can get stuck sending data if more than one start and stop condition is sent in quick sucession.
 
 ***TODO***
+Implement DMA support for SPI and I2C.
