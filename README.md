@@ -30,7 +30,8 @@ Standard compilation routine using ARM compiler for STM32F407xx family of device
 C was the exclusive programming language used for this project. No libraries were used aside from C standard libraries like stdint.h and stddef.h. Utilizing the datasheet and reference manual for the STM32407xx family of MCUs, I wrote several macros and functions that use direct hardware level access to implement the different protocols using the peripherals in the MCU.
 
 # Background
-This project was taken for the purpose of learning and getting hands on experience with bare metal embedded driver development. I have enjoy low-level development and wanted to gain experience working with register level programming and implementing my own APIs for different protocols without using a HAL, to learn how the hardware/software interactions really work.
+This project was taken for the purpose of learning and getting hands on experience with bare metal embedded driver development. I wanted to gain more experience working with register level programming and implementing my own APIs for different protocols without using a HAL, to learn how the hardware/software interactions really work. Going through the reference manual, datasheet, and schematics for the MCU was very interesting and provided a lot of insight on how
+the software and hardware interactions take place.
 
 # Known Issues
 I2C interrupt can get stuck sending data if more than one start and stop condition is sent in quick sucession.
