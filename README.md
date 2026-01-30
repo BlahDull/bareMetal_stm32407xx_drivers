@@ -16,7 +16,7 @@ Project implementing bare metal drivers for peripheral control for STM32407xx fa
 * **DMA**: Allows the user to configure the DMA controller to enable DMA streams to transfer data from memory to memory, peripheral to memory, and memory to peripheral. The user can specify whether or not to use FIFO, the FIFO threshold, priority, whether or not to auto increment the addresses, and whether or not interrupts.
 
 # API Description & Usage
-***TODO***
+Each driver gives a handle structure that the user should configure before calling the appropriate Init() function and passing the handle. In the case of SPI, I2C, and UART, the peripheral should then be enabled by calling the appropriate enable function.
 
 # Installation
 
@@ -35,5 +35,5 @@ This project was taken for the purpose of learning and getting hands on experien
 # Known Issues
 I2C interrupt can get stuck sending data if more than one start and stop condition is sent in quick sucession.
 
-***TODO***
+# ***TODO***
 Implement DMA support for SPI and I2C.
