@@ -10,6 +10,47 @@
 uint16_t AHB_PreScaler[] = {2,4,8,16,32,64,128,256,512};
 uint16_t APB1_PreScaler[] = {2, 4, 8, 16};
 
+void RCC_OscConfig(RCC_OscConfig_t* config) {
+	if (config->RCC_OscType == RCC_OSCTYPE_HSE) {
+		RCC->CR &= ~(1 << RCC_CR_HSEON_POS);
+		if (config->RCC_HSEState == RCC_HSESTATE_BYPASS) {
+			RCC->CR |= (1 << RCC_CR_HSEBYP_POS);
+		}
+		RCC->CR |= (1 << RCC_CR_HSEON_POS);
+		while (!((RCC->CR >> (RCC_CR_HSERDY_POS - 1)) & 1));
+	}
+	if (config->PLL.PLL_State != PLL_NONE) {
+		if (config->PLL.PLL_State == PLL_ON) {
+			RCC->PLLCFGR |= (config->PLL.PLL_DIV_Q << RCC_PLLCFGR_PLLQ_POS);
+			RCC->PLLCFGR |= (config->PLL.PLL_DIV_P << RCC_PLLCFGR_PLLP_POS);
+			RCC->PLLCFGR |= (config->PLL.PLL_MULT_N << RCC_PLLCFGR_PLLN_POS);
+			RCC->PLLCFGR |= (config->PLL.PLL_DIV_M << RCC_PLLCFGR_PLLM_POS);
+			RCC->PLLCFGR |= (config->PLL.PLL_Source << RCC_PLLCFGR_PLLSRC_POS);
+			RCC->CR |= (1 << RCC_CR_PLLON_POS);
+			while (!(RCC->CR & (1 << RCC_CR_PLLRDY_POS)));
+		}
+	}
+}
+
+void RCC_ClockConfig(RCC_ClockConfig_t* config) {
+	if (config->RCC_ClockType & RCC_ClockType_HCLK) {
+		RCC->CFGR |= (config->RCC_AHB_ClockDiv << RCC_CFGR_HPRE_POS);
+	}
+	FLASH_INTERFACE->FLASH_ACR &= ~(0b111U << FLASH_ACR_LATENCY_POS);
+	FLASH_INTERFACE->FLASH_ACR |= (config->Flatency);
+	while (((FLASH_INTERFACE->FLASH_ACR >> (FLASH_ACR_LATENCY_POS)) & (0b111U)) != config->Flatency);
+	if (config->RCC_ClockType & RCC_ClockType_PCLK1) {
+		RCC->CFGR |= (config->RCC_APB1_ClockDiv << RCC_CFGR_PPRE1_POS);
+	}
+	if (config->RCC_ClockType & RCC_ClockType_PCLK2) {
+		RCC->CFGR |= (config->RCC_APB2_ClockDiv << RCC_CFGR_PPRE2_POS);
+	}
+	RCC->CFGR |= (config->RCC_SysClockSrc << RCC_CFGR_SW_POS);
+	if (config->RCC_SysClockSrc != RCC_SysClockSrc_HSI) {
+		RCC->CR &= ~(1 << RCC_CR_HSION_POS);
+	}
+}
+
 uint32_t RCC_GetPLCK1Value() {
 	uint32_t pCLK1 = 0, sysClk = 0;
 	uint8_t clkSrc = 0, tmp = 0, AHBPrescaler = 0, APB1Prescaler = 0;

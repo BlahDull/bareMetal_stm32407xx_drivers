@@ -58,6 +58,7 @@
 #define RCC_BASE_ADDR (AHB1_PERIPH_BASE + 0x3800)
 #define DMA1_BASE_ADDR (AHB1_PERIPH_BASE + 0x6000)
 #define DMA2_BASE_ADDR (AHB1_PERIPH_BASE + 0x6400)
+#define FLASH_INTERFACE_BASE_ADDR (AHB1_PERIPH_BASE + 0x3C00)
 
 // APB1 Bus Peripherals
 #define I2C1_BASE_ADDR (APB1_PERIPH_BASE + 0x5400)
@@ -211,6 +212,16 @@ typedef struct {
 	DMA_Stream_t DMA_Streams[8];
 } DMA_RegDef_t;
 
+
+typedef struct {
+	__vo uint32_t FLASH_ACR;
+	__vo uint32_t FLASH_KEYR;
+	__vo uint32_t FLASH_OPT_KEYR;
+	__vo uint32_t FLASH_SR;
+	__vo uint32_t FLASH_CR;
+	__vo uint32_t FLASH_OPTCR;
+} FlashInterface_RegDef_t;
+
 // Peripheral Definitions
 
 #define RCC ((RCC_RegDef_t*) RCC_BASE_ADDR)
@@ -218,6 +229,8 @@ typedef struct {
 #define EXTI ((EXTI_RegDef_t*) EXTI_BASE_ADDR)
 
 #define SYSCFG ((SYSCFG_RegDef_t*) SYSCFG_BASE_ADDR)
+
+#define FLASH_INTERFACE ((FlashInterface_RegDef_t*) FLASH_INTERFACE_BASE_ADDR)
 
 #define GPIOA ((GPIO_RegDef_t*) GPIOA_BASE_ADDR)
 #define GPIOB ((GPIO_RegDef_t*) GPIOB_BASE_ADDR)
@@ -357,6 +370,57 @@ typedef struct {
 #define EXTI4 10
 #define EXTI9_5 23
 #define EXTI15_10 40
+
+// RCC Section
+#define RCC_CR_HSION_POS 0
+#define RCC_CR_HSIRDY_POS 1
+#define RCC_CR_HSITRIM0_POS 3
+#define RCC_CR_HSITRIM1_POS 4
+#define RCC_CR_HSITRIM2_POS 5
+#define RCC_CR_HSITRIM3_POS 6
+#define RCC_CR_HSITRIM4_POS 7
+#define RCC_CR_HSICAL0_POS 8
+#define RCC_CR_HSICAL1_POS 9
+#define RCC_CR_HSICAL2_POS 10
+#define RCC_CR_HSICAL3_POS 11
+#define RCC_CR_HSICAL4_POS 12
+#define RCC_CR_HSICAL5_POS 13
+#define RCC_CR_HSICAL6_POS 14
+#define RCC_CR_HSICAL7_POS 15
+#define RCC_CR_HSEON_POS 16
+#define RCC_CR_HSERDY_POS 17
+#define RCC_CR_HSEBYP_POS 18
+#define RCC_CR_CSSON_POS 19
+#define RCC_CR_PLLON_POS 24
+#define RCC_CR_PLLRDY_POS 25
+#define RCC_CR_PLLI2SON_POS 26
+#define RCC_CR_PLLIS2RDY_POS 27
+
+#define RCC_PLLCFGR_PLLM_POS 0
+#define RCC_PLLCFGR_PLLN_POS 6
+#define RCC_PLLCFGR_PLLP_POS 16
+#define RCC_PLLCFGR_PLLSRC_POS 22
+#define RCC_PLLCFGR_PLLQ_POS 24
+
+#define RCC_CFGR_SW_POS 0
+#define RCC_CFGR_SWS_POS 2
+#define RCC_CFGR_HPRE_POS 4
+#define RCC_CFGR_PPRE1_POS 10
+#define RCC_CFGR_PPRE2_POS 13
+#define RCC_CFGR_RTCPRE_POS 16
+#define RCC_CFGR_MCO1_POS 21
+#define RCC_CFGR_I2SSRC_POS 23
+#define RCC_CFGR_MCO1PRE_POS 24
+#define RCC_CFGR_MCO2PRE_POS 27
+#define RCC_CFGR_MCO2_POS 30
+
+// Flash section
+#define FLASH_ACR_LATENCY_POS 0
+#define FLASH_ACR_PRFTEN_POS 8
+#define FLASH_ACR_ICEN_POS 9
+#define FLASH_ACR_DCEN_POS 10
+#define FLASH_ACR_ICRST_POS 11
+#define FLASH_ACR_DCRST_POS 12
 
 // IRQ Nums for SPI peripherals
 #define IRQ_SPI1 35
