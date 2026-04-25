@@ -98,8 +98,20 @@ typedef struct {
 #define FLatency_6WS 0b110U
 #define FLatency_7WS 0b111U
 
+#define RCC_MCO1_CLKSRC_HSI 0b00U
+#define RCC_MCO1_CLKSRC_LSE 0b01U
+#define RCC_MCO1_CLKSRC_HSE 0b10U
+#define RCC_MCO1_CLKSRC_PLL 0b11U
+
+#define RCC_MCO1_PRESCALER_NONE 0b000U
+#define RCC_MCO1_PRESCALER_2 0b100U
+#define RCC_MCO1_PRESCALER_3 0b101U
+#define RCC_MCO1_PRESCALER_4 0b110U
+#define RCC_MCO1_PRESCALER_5 0b111U
+
 void RCC_OscConfig(RCC_OscConfig_t*);
 void RCC_ClockConfig(RCC_ClockConfig_t*);
+void RCC_ConfigureMCO1(uint8_t, uint8_t);
 uint32_t RCC_GetPLCK1Value();
 uint32_t RCC_GetPLCK2Value();
 

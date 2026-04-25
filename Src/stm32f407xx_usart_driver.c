@@ -93,7 +93,7 @@ void USART_SetBaudRate(USART_RegDef_t* pUSARTx, uint32_t BaudRate) {
 	if (pUSARTx == USART1 || pUSARTx == USART6) {
 		PCLKx = RCC_GetPLCK2Value();
 	} else {
-		PCLKx = RCC_GetPLCK2Value();
+		PCLKx = RCC_GetPLCK1Value();
 	}
 
 	if (pUSARTx->USART_CR1 & (1 << USART_CR1_OVER8_POS)) {

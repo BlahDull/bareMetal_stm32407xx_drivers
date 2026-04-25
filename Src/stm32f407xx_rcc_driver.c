@@ -21,9 +21,13 @@ void RCC_OscConfig(RCC_OscConfig_t* config) {
 	}
 	if (config->PLL.PLL_State != PLL_NONE) {
 		if (config->PLL.PLL_State == PLL_ON) {
+			RCC->PLLCFGR &= ~(0b1111U << RCC_PLLCFGR_PLLQ_POS);
 			RCC->PLLCFGR |= (config->PLL.PLL_DIV_Q << RCC_PLLCFGR_PLLQ_POS);
+			RCC->PLLCFGR &= ~(0b11U << RCC_PLLCFGR_PLLP_POS);
 			RCC->PLLCFGR |= (config->PLL.PLL_DIV_P << RCC_PLLCFGR_PLLP_POS);
+			RCC->PLLCFGR &= ~(0b111111111U << RCC_PLLCFGR_PLLN_POS);
 			RCC->PLLCFGR |= (config->PLL.PLL_MULT_N << RCC_PLLCFGR_PLLN_POS);
+			RCC->PLLCFGR &= ~(0b111111U << RCC_PLLCFGR_PLLM_POS);
 			RCC->PLLCFGR |= (config->PLL.PLL_DIV_M << RCC_PLLCFGR_PLLM_POS);
 			RCC->PLLCFGR |= (config->PLL.PLL_Source << RCC_PLLCFGR_PLLSRC_POS);
 			RCC->CR |= (1 << RCC_CR_PLLON_POS);
@@ -49,6 +53,11 @@ void RCC_ClockConfig(RCC_ClockConfig_t* config) {
 	if (config->RCC_SysClockSrc != RCC_SysClockSrc_HSI) {
 		RCC->CR &= ~(1 << RCC_CR_HSION_POS);
 	}
+}
+
+void RCC_ConfigureMCO1(uint8_t clk_select, uint8_t prescaler) {
+	RCC->CFGR |= (prescaler << RCC_CFGR_MCO1PRE_POS);
+	RCC->CFGR |= (clk_select << RCC_CFGR_MCO1_POS);
 }
 
 uint32_t RCC_GetPLCK1Value() {
