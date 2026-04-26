@@ -59,6 +59,7 @@
 #define DMA1_BASE_ADDR (AHB1_PERIPH_BASE + 0x6000)
 #define DMA2_BASE_ADDR (AHB1_PERIPH_BASE + 0x6400)
 #define FLASH_INTERFACE_BASE_ADDR (AHB1_PERIPH_BASE + 0x3C00)
+#define USB_OTG_HS_BASE_ADDR (AHB1_PERIPH_BASE + 0x20000)
 
 // APB1 Bus Peripherals
 #define I2C1_BASE_ADDR (APB1_PERIPH_BASE + 0x5400)
@@ -222,6 +223,177 @@ typedef struct {
 	__vo uint32_t FLASH_OPTCR;
 } FlashInterface_RegDef_t;
 
+//typedef struct {
+//	__vo uint32_t HS_GOTGCTL;
+//	__vo uint32_t HS_GOTGINT;
+//	__vo uint32_t HS_GAHBCFG;
+//	__vo uint32_t HS_GUSBCFG;
+//	__vo uint32_t HS_GRSTCTL;
+//	__vo uint32_t HS_GINTSTS;
+//	__vo uint32_t HS_GINTMSK;
+//	__vo uint32_t HS_GRXSTSR;
+//	__vo uint32_t HS_GRXSTSP;
+//	__vo uint32_t HS_GRXFSIZ;
+//	__vo uint32_t HS_GNPTXFSIZ;
+//	__vo uint32_t HS_GNPTXSTS;
+//	__vo uint32_t HS_GI2CCTL;
+//	__vo uint32_t HS_GCCFG;
+//	__vo uint32_t HS_HS_CID;
+//	__vo uint32_t HS_HPTXFSIZ;
+//	__vo uint32_t HS_DIEPTXF1;
+//	__vo uint32_t HS_DIEPTXF2;
+//	__vo uint32_t HS_DIEPTXF3;
+//	__vo uint32_t HS_DIEPTXF4;
+//	__vo uint32_t HS_HCFG;
+//	__vo uint32_t HS_HFIR;
+//	__vo uint32_t HS_HFNUM;
+//	__vo uint32_t HS_HPTXSTS;
+//	__vo uint32_t HS_HAINT;
+//	__vo uint32_t HS_HAINTMSK;
+//	__vo uint32_t HS_HPRT;
+//	__vo uint32_t HS_HCCHAR0;
+//	__vo uint32_t HS_HCCHAR1;
+//	__vo uint32_t HS_HCCHAR2;
+//	__vo uint32_t HS_HCCHAR3;
+//	__vo uint32_t HS_HCCHAR4;
+//	__vo uint32_t HS_HCCHAR5;
+//	__vo uint32_t HS_HCCHAR6;
+//	__vo uint32_t HS_HCCHAR7;
+//	__vo uint32_t HS_HCCHAR8;
+//	__vo uint32_t HS_HCCHAR9;
+//	__vo uint32_t HS_HCCHAR10;
+//	__vo uint32_t HS_HCCHAR11;
+//	__vo uint32_t HS_HCSPLT0;
+//	__vo uint32_t HS_HCINT0;
+//	__vo uint32_t HS_HCSPLT1;
+//	__vo uint32_t HS_HCINT1;
+//	__vo uint32_t HS_HCSPLT2;
+//	__vo uint32_t HS_HCINT2;
+//	__vo uint32_t HS_HCSPLT3;
+//	__vo uint32_t HS_HCINT3;
+//	__vo uint32_t HS_HCSPLT4;
+//	__vo uint32_t HS_HCINT4;
+//	__vo uint32_t HS_HCSPLT5;
+//	__vo uint32_t HS_HCINT5;
+//	__vo uint32_t HS_HCSPLT6;
+//	__vo uint32_t HS_HCINT6;
+//	__vo uint32_t HS_HCSPLT7;
+//	__vo uint32_t HS_HCINT7;
+//	__vo uint32_t HS_HCSPLT8;
+//	__vo uint32_t HS_HCINT8;
+//	__vo uint32_t HS_HCSPLT9;
+//	__vo uint32_t HS_HCINT9;
+//	__vo uint32_t HS_HCSPLT10;
+//	__vo uint32_t HS_HCINT10;
+//	__vo uint32_t HS_HCSPLT11;
+//	__vo uint32_t HS_HCINT11;
+//	__vo uint32_t HS_HCLNTMSK0;
+//	__vo uint32_t HS_HCLNTMSK1;
+//	__vo uint32_t HS_HCLNTMSK2;
+//	__vo uint32_t HS_HCLNTMSK3;
+//	__vo uint32_t HS_HCLNTMSK4;
+//	__vo uint32_t HS_HCLNTMSK5;
+//	__vo uint32_t HS_HCLNTMSK6;
+//	__vo uint32_t HS_HCLNTMSK7;
+//	__vo uint32_t HS_HCLNTMSK8;
+//	__vo uint32_t HS_HCLNTMSK9;
+//	__vo uint32_t HS_HCLNTMSK10;
+//	__vo uint32_t HS_HCLNTMSK11;
+//	__vo uint32_t HS_HCTSIZ0;
+//	__vo uint32_t HS_HCTSIZ1;
+//	__vo uint32_t HS_HCTSIZ2;
+//	__vo uint32_t HS_HCTSIZ3;
+//	__vo uint32_t HS_HCTSIZ4;
+//	__vo uint32_t HS_HCTSIZ5;
+//	__vo uint32_t HS_HCTSIZ6;
+//	__vo uint32_t HS_HCTSIZ7;
+//	__vo uint32_t HS_HCTSIZ8;
+//	__vo uint32_t HS_HCTSIZ9;
+//	__vo uint32_t HS_HCTSIZ10;
+//	__vo uint32_t HS_HCTSIZ11;
+//	__vo uint32_t HS_HCDMA0;
+//	__vo uint32_t HS_HCDMA1;
+//	__vo uint32_t HS_HCDMA2;
+//	__vo uint32_t HS_HCDMA3;
+//	__vo uint32_t HS_HCDMA4;
+//	__vo uint32_t HS_HCDMA5;
+//	__vo uint32_t HS_HCDMA6;
+//	__vo uint32_t HS_HCDMA7;
+//	__vo uint32_t HS_HCDMA8;
+//	__vo uint32_t HS_HCDMA9;
+//	__vo uint32_t HS_HCDMA10;
+//	__vo uint32_t HS_HCDMA11;
+//	__vo uint32_t HS_DCFG;
+//	__vo uint32_t HS_DCTL;
+//	__vo uint32_t HS_DSTS;
+//	__vo uint32_t HS_DIEPMSK;
+//	__vo uint32_t HS_DOEPMSK;
+//	__vo uint32_t HS_DAINT;
+//	__vo uint32_t HS_DVBUSDIS;
+//	__vo uint32_t HS_DVBUSPULSE;
+//	__vo uint32_t HS_DTHRCTL;
+//	__vo uint32_t HS_DIEPEMPMSK;
+//	__vo uint32_t HS_DEACHINT;
+//	__vo uint32_t HS_DEACHINTMSK;
+//	__vo uint32_t HS_DIEPEACHMSK1;
+//	__vo uint32_t HS_DOEPEACHMSK1;
+//	__vo uint32_t HS_DIEPCTL0;
+//	__vo uint32_t HS_DTXFSTS0;
+//	__vo uint32_t HS_DIEPCTL1;
+//	__vo uint32_t HS_DTXFSTS1;
+//	__vo uint32_t HS_DIEPCTL2;
+//	__vo uint32_t HS_DTXFSTS2;
+//	__vo uint32_t HS_DIEPCTL3;
+//	__vo uint32_t HS_DTXFSTS3;
+//	__vo uint32_t HS_DIEPCTL4;
+//	__vo uint32_t HS_DIEPCTL5;
+//	__vo uint32_t HS_DIEPCTL6;
+//	__vo uint32_t HS_DIEPCTL7;
+//	__vo uint32_t HS_DOEPCTL0;
+//	__vo uint32_t HS_DOEPCTL1;
+//	__vo uint32_t HS_DOEPCTL2;
+//	__vo uint32_t HS_DOEPCTL3;
+//	__vo uint32_t HS_DIEPINT0;
+//	__vo uint32_t HS_DIEPINT1;
+//	__vo uint32_t HS_DIEPINT2;
+//	__vo uint32_t HS_DIEPINT3;
+//	__vo uint32_t HS_DIEPINT4;
+//	__vo uint32_t HS_DIEPINT5;
+//	__vo uint32_t HS_DIEPINT6;
+//	__vo uint32_t HS_DIEPINT7;
+//	__vo uint32_t HS_DOEPINT0;
+//	__vo uint32_t HS_DOEPINT1;
+//	__vo uint32_t HS_DOEPINT2;
+//	__vo uint32_t HS_DOEPINT3;
+//	__vo uint32_t HS_DOEPINT4;
+//	__vo uint32_t HS_DOEPINT5;
+//	__vo uint32_t HS_DOEPINT6;
+//	__vo uint32_t HS_DOEPINT7;
+//	__vo uint32_t HS_DIEPTSIZ0;
+//	__vo uint32_t HS_DIEPTSIZ1;
+//	__vo uint32_t HS_DIEPDMA1;
+//	__vo uint32_t HS_DIEPDMAB1;
+//	__vo uint32_t HS_DIEPTSIZ2;
+//	__vo uint32_t HS_DIEPDMA2;
+//	__vo uint32_t HS_DIEPDMAB2;;
+//	__vo uint32_t HS_DIEPTSIZ3;
+//	__vo uint32_t HS_DIEPDMA3;
+//	__vo uint32_t HS_DIEPDMAB3;
+//	__vo uint32_t HS_DOEPTSIZ0;
+//	__vo uint32_t HS_DOEPTSIZ1;
+//	__vo uint32_t HS_DOEPDMA1;
+//	__vo uint32_t HS_DOEPDMAB1;
+//	__vo uint32_t HS_DOEPTSIZ2;
+//	__vo uint32_t HS_DOEPDMA2;
+//	__vo uint32_t HS_DOEPDMAB2;
+//	__vo uint32_t HS_DOEPTSIZ3;
+//	__vo uint32_t HS_DOEPDMA3;
+//	__vo uint32_t HS_DOEPDMAB3;
+//	__vo uint32_t HS_PCGCCTL;
+//} USB_OTG_HS_Device_RegDef_t;
+
+
+
 // Peripheral Definitions
 
 #define RCC ((RCC_RegDef_t*) RCC_BASE_ADDR)
@@ -264,6 +436,9 @@ typedef struct {
 #define USART3 ((USART_RegDef_t*) USART3_BASE_ADDR)
 #define USART6 ((USART_RegDef_t*) USART6_BASE_ADDR)
 
+
+//#define USB_OTG_HS_DEVICE ((USB_OTG_HS_Device_RegDef_t*) USB_OTG_HS_BASE_ADDR)
+
 // Clock enable macros for GPIOx peripherals
 #define GPIOA_PCLK_EN() (RCC->AHB1ENR |= (1 << 0))
 #define GPIOB_PCLK_EN() (RCC->AHB1ENR |= (1 << 1))
@@ -274,6 +449,9 @@ typedef struct {
 #define GPIOG_PCLK_EN() (RCC->AHB1ENR |= (1 << 6))
 #define GPIOH_PCLK_EN() (RCC->AHB1ENR |= (1 << 7))
 #define GPIOI_PCLK_EN() (RCC->AHB1ENR |= (1 << 8))
+
+// Clock enable macros for USB_HS peripheral
+#define USB_HS_PCLK_EN() (RCC->AHB1ENR |= (1 << 29))
 
 // Clock enable macros for DMA peripherals
 #define DMA1_PCLK_EN()  (RCC->AHB1ENR |= (1 << 21))
@@ -311,6 +489,9 @@ typedef struct {
 #define GPIOG_PCLK_DI() (RCC->AHB1ENR &= ~(1 << 6))
 #define GPIOH_PCLK_DI() (RCC->AHB1ENR &= ~(1 << 7))
 #define GPIOI_PCLK_DI() (RCC->AHB1ENR &= ~(1 << 8))
+
+// Clock disable macros for USB_HS peripheral
+#define USB_HS_PCLK_DI() (RCC->AHB1ENR &= ~(1 << 29))
 
 // Clock disable macros for I2C peripherals
 #define I2C1_PCLK_DI() (RCC->APB1ENR &= ~(1 << 21))
@@ -611,11 +792,30 @@ typedef struct {
 #define IRQ_DMA2_STREAM3 59
 #define IRQ_DMA2_STREAM4 60
 
+
+#define OTG_HS_GUSBCFG_TRDT_POS 10
+#define OTG_HS_GUSBCFG_FDMOD_POS 30
+#define OTG_HS_GUSBCFG_PHYSEL_POS 6
+#define OTG_HS_GCCFG_VBUSBSEN_POS 19
+#define OTG_HS_GINTMSK_USBRST_POS 12
+#define OTG_HS_GINTMSK_ENUMDNEM_POS 13
+#define OTG_HS_GINTMSK_SOFM_POS 3
+#define OTG_HS_GINTMSK_USBSUSPM_POS 11
+#define OTG_HS_GINTMSK_WUIM_POS 31
+#define OTG_HS_GINTMSK_IEPINT_POS 18
+#define OTG_HS_GINTMSK_RXFLVLM_POS 4
+#define OTG_HS_GAHBCFG_GINT_POS 0
+#define OTG_HS_GCCFG_PWRDWN_POS 16
+#define OTG_HS_DCTL_SDIS_POS 1
+
+#define OTG_HS_DCFG_DSPD_POS 0
+
 #include "stm32f407xx_gpio_driver.h"
 #include "stm32f407xx_spi_driver.h"
 #include "stm32f407xx_i2c_driver.h"
 #include "stm32f407xx_usart_driver.h"
 #include "stm32f407xx_dma_driver.h"
 #include "stm32f407xx_rcc_driver.h"
+#include "stm32f407xx_usb_device_driver.h"
 
 #endif /* INC_STM32F407XX_H_ */
